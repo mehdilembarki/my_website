@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "http://mehdi-lembarki.netlify.app"
+baseURL = "https://mehdi-lembarki.netlify.app"
 languageCode = "en-us"
 title = "Mehdi Lembarki Kadiri"
 theme = "forty"
