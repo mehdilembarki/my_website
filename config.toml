@@ -1,7 +1,7 @@
 # Site settings
 baseURL = "http://mehdi-lembarki.netlify.app"
 languageCode = "en-us"
-title = "Mehdi Lembarki Kadiry"
+title = "Mehdi Lembarki Kadiri"
 theme = "forty"
 
 # Enter your tracking code to enable Google Analytics
