@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="Your description">
+	<meta name="author" content="Your name">
+	<meta name="generator" content="Hugo 0.74.3" />
+	<title>Beer, wine and spirits &middot; Mehdi Lembarki Kadiry</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Mehdi Lembarki Kadiry</strong> <span></span></a>
+        <nav>
+            <a href="#menu">Menu</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Beer, wine and spirits</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/blogs/pic09.jpg" alt="" /></span>
+                            
+                            <pre><code class="language-{r," data-lang="{r,">knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size=&quot;small&quot;)   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = &quot;center&quot;
+)
+</code></pre><pre><code class="language-{r" data-lang="{r">library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(fivethirtyeight)
+library(here)
+library(skimr)
+library(janitor)
+library(vroom)
+library(tidyquant)
+library(patchwork)
+
+</code></pre><h1 id="where-do-people-drink-the-most-beer-wine-and-spirits">Where Do People Drink The Most Beer, Wine And Spirits?</h1>
+<pre><code class="language-{r" data-lang="{r">library(fivethirtyeight)
+data(drinks)
+
+</code></pre><pre><code class="language-{r" data-lang="{r">skim(drinks)
+</code></pre><p>What are the variable types? Any missing values we should worry about?</p>
+<p>Answer:</p>
+<p>Variable types : character, numeric
+There are no missing values</p>
+<pre><code class="language-{r" data-lang="{r">
+top25_beer_plot &lt;- drinks %&gt;% 
+  top_n(25, beer_servings) %&gt;% #ranked top 25 by beer servings
+  ggplot(aes(
+    x = beer_servings,
+    y = reorder(country,beer_servings) #Ordered countries by beer servings
+  )) +
+  geom_col() +
+  labs(
+    x = &quot;Beer Servings&quot;, 
+    y = &quot;Country&quot;, 
+    title = &quot;Top 25 Beer Consuming Countries&quot;) + #added labels to axis and title
+  theme_minimal() +
+  NULL
+
+top25_beer_plot
+
+
+</code></pre><pre><code class="language-{r" data-lang="{r">
+#copied top 25 beer plot and replaced beer with wine
+top25_wine_plot &lt;- drinks %&gt;% 
+  top_n(25, wine_servings) %&gt;% 
+  ggplot(aes(
+    x = wine_servings,
+    y = reorder(country,wine_servings)
+  )) +
+  geom_col() +
+  labs(
+    x = &quot;Wine Servings&quot;, 
+    y = &quot;Country&quot;, 
+    title = &quot;Top 25 Wine Consuming Countries&quot;) + 
+  theme_minimal() +
+  NULL
+
+top25_wine_plot
+
+
+</code></pre><pre><code class="language-{r" data-lang="{r">
+#copied top 25 beer plot and replaced beer with spirit
+top25_spirit_plot &lt;- drinks %&gt;% 
+  top_n(25, spirit_servings) %&gt;% 
+  ggplot(aes(
+    x = spirit_servings,
+    y = reorder(country,spirit_servings)
+  )) +
+  geom_col() +
+  labs(
+    x = &quot;Spirit Servings&quot;, 
+    y = &quot;Country&quot;, 
+    title = &quot;Top 25 Spirit Consuming Countries&quot;) + 
+  theme_minimal() +
+  NULL
+
+top25_spirit_plot
+
+</code></pre><blockquote>
+<p>IMPLICATIONS</p>
+</blockquote>
+<ul>
+<li>In the wine consumption rankings, 9 of the top 10 are European countries. Most areas of Europe (especially the low latitudes) are very suitable for growing grapes due to sufficient sunlight and fertile soil. The typical ones are Southern France, Portugal, Andorra, Italy, and Greece. This may develop the people&rsquo;s habit of drinking wine. Compared to wine, the high beer consuming countries are mainly in higher latitudes (north of the Alps), since wheat is widely planted and is an important raw material for beer in these countries. In addition, the beer ranking includes the most continents among other liquors, which may implicate that beer is the most widely accepted and accessible alcohol in the world.</li>
+<li>In the spirits consumption ranking, six of the top 25 are island countries in the Caribbean and the Pacific, and 11 of the top 25 are East European countries. This conforms to the origins of two very famous spirit types - rum and vodka.</li>
+</ul>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://github.com/mehdilembarki" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://linkedin.com/in/mehdi-lembarki-kadiri-59713b166" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Company Name</li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>

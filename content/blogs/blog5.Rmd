@@ -1,0 +1,240 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:42:51-05:00"
+draft: false
+keywords: ""
+slug: blog5
+title: Movies analysis 
+---
+```{r, setup}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(fivethirtyeight)
+library(here)
+library(skimr)
+library(janitor)
+library(vroom)
+library(tidyquant)
+library(patchwork)
+
+```
+
+
+
+# Analysis of movies- IMDB dataset
+
+  
+```{r load_movies_data}
+
+read_csv("movies.csv")
+glimpse(movies)
+
+```
+
+## Use your data import, inspection, and cleaning skills to answer the following:
+
+```{r skim_movies_data}
+skim(movies)
+```
+- Are there any missing values (NAs)? Are all entries distinct or are there duplicate entries?
+
+>Answer
+
+  -missing values (NA) = 0
+  -Duplicates entries = 0
+
+        
+- Produce a table with the count of movies by genre, ranked in descending order
+
+```{r kable_movies_by_genre}
+
+library(kableExtra)
+
+kable_movies_by_genre <- kbl(movies%>% distinct() %>% 
+  group_by(genre)%>%
+  count(genre)%>%
+  arrange(desc(n)))%>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed","responsive")) #Used kable function for read-friendly table
+
+kable_movies_by_genre
+
+```
+
+
+- Produce a table with the average gross earning and budget (`gross` and `budget`) by genre.
+Calculate a variable `return_on_budget` which shows how many \$ did a movie make at the box office for each \$ of its budget. Ranked genres by this `return_on_budget` in descending order
+
+```{r average_gross_and_budget_by_genre}
+
+library(docxtools)
+
+average_gross_and_budget_by_genre <- kbl(movies %>% 
+ group_by(genre) %>% 
+ summarise(mean_gross = mean(gross), #Summarised to get mean gross earnings
+            mean_budget = mean(budget)) %>% #summarised to get mean budget
+ mutate(return_on_budget = mean_gross/mean_budget) %>% #added column for return on budget.
+ arrange(desc(return_on_budget))) %>% #arranged table in descending order of return on budget
+ kable_styling(bootstrap_options = c("striped","hover","condensed","responsive"))
+
+average_gross_and_budget_by_genre
+
+```
+
+- Produce a table that shows the top 15 directors who have created the highest gross revenue in the box office. Don't just show the total gross amount, but also the mean, median, and standard deviation per director.
+```{r top15_directors}
+
+top15_directors <- kbl(movies %>% group_by(director) %>%
+  summarise(total_gross_director = sum(gross),
+            mean_director = mean(gross),
+            median_director = median(gross),
+            sd_director = sd(gross)) %>%
+  slice_max(order_by = total_gross_director,n = 15)) %>% #used slice_max to select top 15 directors by total gross.
+  kable_styling(bootstrap_options = c("striped","hover","condensed","responsive"))
+
+top15_directors
+
+```
+
+
+- Finally, ratings. Produce a table that describes how ratings are distributed by genre. We don't want just the mean, but also, min, max, median, SD and some kind of a histogram or density graph that visually shows how ratings are distributed. 
+
+Histogram Graph:
+```{r ratings_table_and_graph ,fig.width=20}
+
+ratings_table <- movies %>% #Assigned the requested variables to ratings table
+  group_by(genre) %>%
+  summarise(mean_rating = mean(rating),
+            median_rating = median(rating),
+            sd_rating = sd(rating),
+            min_rating = min(rating),
+            max_rating = max(rating))
+
+
+rating_graph <- ggplot(ratings_table, aes(#Used ratings table to plot graph
+  x = reorder(genre, -mean_rating), #reordered genre by descendin mean rating
+  y = mean_rating,
+  )) +
+  geom_col(width=0.7, position=position_dodge(width=0.8)) +
+  labs(
+    x = "Genre", 
+    y = "Mean Ratings", 
+    title = "Ratings by Genre") +
+  theme_minimal() +
+  NULL
+
+kbl(ratings_table) %>% 
+  kable_styling(bootstrap_options = c("striped","hover","condensed","responsive")) #printed table with kable function
+rating_graph #printed graph
+
+```
+
+
+```{r skim_movies}
+skim(movies)
+```
+
+
+## Use `ggplot` to answer the following
+
+  - Examine the relationship between `gross` and `cast_facebook_likes`. Produce a scatterplot and write one sentence discussing whether the number of facebook likes that the cast has received is likely to be a good predictor of how much money a movie will make at the box office. What variable are you going to map to the Y- and X- axes?
+  
+  
+```{r gross_on_fblikes}
+gross_on_fblikes <- ggplot(movies, aes(x = cast_facebook_likes, y = gross)) + #chose likes on the x-axis, because hypothetically likes influence gross sales and not the other way around
+  geom_point(alpha = 0.2) + 
+  scale_x_log10() + #applied log scale on both axis to get a better view of the data in the plot
+  scale_y_log10() + 
+  geom_smooth(method = lm) + # applied geom smooth to get a trend line
+  labs(
+    title = "Relationship between Facebook likes and gross earnings",
+    x = "Facebook likes",
+    y = "Gross earning"
+  ) +
+  theme_minimal() + 
+  NULL
+
+gross_on_fblikes
+
+```
+  >Answer
+  
+  - We use "cast_facebook_likes" to map the the X-axes and "gross" to map the Y-axes. 
+  - The number of facebook likes that the cast has received can predicts the gross box office. The more facebook likes the movie's cast receives, the more money it will make. However, the positive correlation is not very strong, since given the same "cast_facebook_likes", the deviation of "gross" is quite large, which makes the fitted correlation contain large errors.
+  
+  - Examine the relationship between `gross` and `budget`. Produce a scatterplot and write one sentence discussing whether budget is likely to be a good predictor of how much money a movie will make at the box office.
+
+```{r gross_on_budget}
+gross_on_budget <- ggplot(movies, aes(
+  x = budget, 
+  y = gross
+  )) + 
+  geom_point(alpha = 0.2) + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  geom_smooth(method = lm) + 
+  labs(
+    title = "Relationship between gross earnings and budget",
+    x = "Budget",
+    y = "Gross earnings"
+  ) +
+  theme_minimal() +
+  NULL
+
+gross_on_budget
+
+```
+  >Answer
+  
+  Budget is likely to be a good predictor, since most of the data points are distributed closely near to the fitted line, especially in the upper right corner of the plot.
+  
+  - Examine the relationship between `gross` and `rating`. Produce a scatterplot, faceted by `genre` and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?
+
+```{r gross_on_rating}
+
+gross_on_rating_plot <-ggplot(movies %>% 
+  distinct(), #Used distinct function to remove duplicate rows                               
+       aes(
+       x = rating, 
+       y = gross
+       )) + 
+  geom_point(alpha = 0.2) + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  facet_wrap(~genre) + #faceted the graphs per genre
+  geom_smooth(method = lm) + 
+  labs(
+    title = "Relationship between rating and gross earnings",
+    x = "Rating",
+    y = "Gross earnings"
+  ) +
+  theme_minimal() +
+  NULL
+
+gross_on_rating_plot
+
+```
+>Answer
+
+- For action, adventure, animation, biography, fantasy, and horror movies, IMDB ratings are good predictors, since the distance between data points and the fitted line are rather short, which means the fitted line contains less errors. While for comedy, crime, drama and Sci-Fi movies, the correlation between two variables are rather weak. For some genres, the data are not abundant enough to prove correlations (i.e. family, musical, romance, thriller and western).
+- There is something strange in this dataset. Some entries are almost the same to each other(titles, directors, year, etc. are all the same) except for votes.
