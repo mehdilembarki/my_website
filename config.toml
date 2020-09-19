@@ -81,8 +81,8 @@ disqusShortname = ""
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
     title = "Hi, my name is Mehdi"
-    subtitle = "A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP\nAND RELEASED UNDER THE CREATIVE COMMONS."
-    buttonText = "Get Started"
+    subtitle = 
+    buttonText = "Start"
 
 
   # Tiles Section
@@ -93,7 +93,7 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Movies analysis"
       subtitle = "IMDB ratings"
-      image = "pic01.jpg"
+      image = "pic11.jpg"
       url = "blogs/movies"
 
     [[params.tiles.showcase]]
