@@ -92,7 +92,7 @@ disqusShortname = ""
     
     [[params.tiles.showcase]]
       title = "Movies analysis"
-      subtitle = "Ipsum Dolor Sit Amet"
+      subtitle = "IMDB ratings"
       image = "pic01.jpg"
       url = "blogs/movies"
 
