@@ -91,28 +91,28 @@ disqusShortname = ""
     # Display your showcases here.
     
     [[params.tiles.showcase]]
-      title = "Project 1"
+      title = "Movies analysis"
       subtitle = "Ipsum Dolor Sit Amet"
       image = "pic01.jpg"
-      url = "blogs/aliquam"
+      url = "blogs/movies"
 
     [[params.tiles.showcase]]
-      title = "Project 2"
-      subtitle = "Feugiat Amet Tempus"
+      title = "Beer, Wine And Spirits"
+      subtitle = "Where Do People Drink The Most Beer, Wine And Spirits?"
       image = "pic02.jpg"
-      url = "blogs/tempus"
+      url = "blogs/spirits"
 
     [[params.tiles.showcase]]
-      title = "Project 3"
-      subtitle = "Lorem Etiam Nullam"
+      title = "US elections "
+      subtitle = "Analysis of US elections  "
       image = "pic03.jpg"
-      url = "blogs/magna"
+      url = "blogs/elections"
 
     [[params.tiles.showcase]]
-      title = "Project 4"
-      subtitle = "Nisl Sed Aliquam"
+      title = "Airbnb in Copenhagen"
+      subtitle = "Price for 2 people during 4 nights"
       image = "pic04.jpg"
-      url = "blogs/ipsum"
+      url = "blogs/copenhagen"
 
 
     # You can make more showcases by copy and pasting the code above
