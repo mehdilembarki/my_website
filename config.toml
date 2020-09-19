@@ -178,6 +178,6 @@ disqusShortname = ""
 
     [[params.footer.social]]
       icon = "fa-linkedin"
-      url= "www.linkedin.com/in/mehdi-lembarki-kadiri-59713b166"
+      url= "https://linkedin.com/in/mehdi-lembarki-kadiri-59713b166"
       label = "LinkedIn"
 
