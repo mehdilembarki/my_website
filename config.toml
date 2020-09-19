@@ -99,19 +99,19 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Beer, Wine And Spirits"
       subtitle = "Where Do People Drink The Most Beer, Wine And Spirits?"
-      image = "pic02.jpg"
+      image = "pic12.jpg"
       url = "blogs/spirits"
 
     [[params.tiles.showcase]]
       title = "US elections "
       subtitle = "Analysis of US elections  "
-      image = "pic03.jpg"
+      image = "pic13.jpg"
       url = "blogs/elections"
 
     [[params.tiles.showcase]]
       title = "Airbnb in Copenhagen"
       subtitle = "Price for 2 people during 4 nights"
-      image = "pic04.jpg"
+      image = "pic14.jpg"
       url = "blogs/copenhagen"
 
 
