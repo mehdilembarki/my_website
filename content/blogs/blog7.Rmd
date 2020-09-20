@@ -1,0 +1,159 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:42:51-05:00"
+draft: false
+keywords: ""
+slug: blog7
+title: US elections
+---
+
+
+```{r, setup}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(fivethirtyeight)
+library(here)
+library(skimr)
+library(janitor)
+library(vroom)
+library(tidyquant)
+library(patchwork)
+
+```
+
+# 2016 California Contributors plots
+
+```{r, load_CA_data, warnings= FALSE, message=FALSE}
+CA_contributors_2016<-read_csv("CA_contributors_2016.csv")
+glimpse(CA_contributors_2016)
+```
+```{r loading_zipcodes}
+
+zip_codes <- read_csv("zip_code_database.csv")
+
+CA_contributors_2016$zip <- as.character(CA_contributors_2016$zip)
+
+```
+
+
+```{r glimpse_campaign}
+
+campaign <- inner_join(CA_contributors_2016,zip_codes,by='zip')
+glimpse(campaign)
+
+```
+
+
+```{r assigning_sum_contributions_percandidate}
+
+Total_contb <-campaign %>% 
+  group_by(cand_nm) %>% 
+  summarise(total_amt = sum(contb_receipt_amt)) %>% 
+  arrange(desc(total_amt))
+
+```
+
+```{r clinton_contb_per_city}
+
+Clinton_plot <- ggplot(filter(campaign,cand_nm=="Clinton, Hillary Rodham" & state == "CA") %>%  
+               group_by(primary_city) %>% 
+               summarise(total_amt_county = sum(contb_receipt_amt)) %>%
+               arrange(desc(total_amt_county)) %>%
+               slice_max(total_amt_county,n=10),aes(
+                 x=total_amt_county,
+                 y=reorder(primary_city,total_amt_county))) +
+  geom_col(fill="blue") + 
+  labs(title = "Hillary Clinton") + 
+  theme_clean() + 
+  ylab(" ") + 
+  xlab("Amount") + 
+  scale_x_continuous(labels=scales::comma) +
+  NULL
+
+```
+
+```{r Trump_contb_per_city}
+
+
+Trump_plot <- ggplot(filter(campaign,cand_nm=="Trump, Donald J." & state == "CA") %>%  
+                       group_by(primary_city) %>% 
+                       summarise(total_amt_county = sum(contb_receipt_amt)) %>%
+                       arrange(desc(total_amt_county)) %>%
+                       slice_max(total_amt_county,n=10),aes(
+                         x = total_amt_county,
+                         y = reorder(primary_city,total_amt_county),)) +
+  geom_col(fill= "red") +
+  labs(title="Donald Trump") +
+  theme_clean() + ylab(" ") +
+  xlab("Amount") +
+  scale_x_continuous(labels = scales::comma) +
+  NULL
+
+```
+
+```{r cobining_plots,fig.width = 11, fig.asp = .72}
+
+library(patchwork)
+
+combined_plot <- Clinton_plot + Trump_plot 
+  plot_annotation(title = "Where did the candidates raise most money?")
+
+combined_plot
+
+```
+
+```{r top_10_candidates,fig.width = 30, fig.asp = .72}
+#Attempting to loop plots
+library(patchwork)
+
+#selecting top 10 rows from Total_contb
+top_10_candidates <- Total_contb %>%
+  slice_max(total_amt,n = 10)
+
+plots <- list()
+
+#creating a loop to run plots
+Candidate_plots <- 1
+for(politicians in top_10_candidates$cand_nm){
+  plots[[Candidate_plots]] <- ggplot(filter(campaign,cand_nm == politicians & state == "CA") %>%  
+                         group_by(primary_city) %>% 
+                         summarise(total_amt_county = sum(contb_receipt_amt)) %>%
+                         arrange(desc(total_amt_county)) %>%
+                         slice_max(total_amt_county,n=10),aes(
+                           x = total_amt_county,
+                           y = reorder(primary_city,total_amt_county)
+                           ))+
+    geom_col(fill= "blue") +
+    labs(title=politicians) +
+    theme_clean() + 
+    ylab(" ") +
+    xlab("Amount") +
+    scale_x_continuous(labels = scales::comma)
+Candidate_plots <- Candidate_plots + 1
+}
+wrap_plots(plots,ncol =5)
+
+```
+
+

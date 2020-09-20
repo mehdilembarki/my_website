@@ -1,0 +1,160 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:42:51-05:00"
+draft: false
+keywords: ""
+slug: blog7
+title: US elections
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<pre class="r"><code>knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size=&quot;small&quot;)   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = &quot;center&quot;
+)</code></pre>
+<div id="california-contributors-plots" class="section level1">
+<h1>2016 California Contributors plots</h1>
+<pre class="r"><code>CA_contributors_2016&lt;-read_csv(&quot;CA_contributors_2016.csv&quot;)
+glimpse(CA_contributors_2016)</code></pre>
+<pre><code>## Rows: 1,292,843
+## Columns: 4
+## $ cand_nm           &lt;chr&gt; &quot;Clinton, Hillary Rodham&quot;, &quot;Clinton, Hillary Rodham…
+## $ contb_receipt_amt &lt;dbl&gt; 50.0, 200.0, 5.0, 48.3, 40.0, 244.3, 35.0, 100.0, 2…
+## $ zip               &lt;dbl&gt; 94939, 93428, 92337, 95334, 93011, 95826, 90278, 90…
+## $ contb_date        &lt;date&gt; 2016-04-26, 2016-04-20, 2016-04-02, 2016-11-21, 20…</code></pre>
+<pre class="r"><code>zip_codes &lt;- read_csv(&quot;zip_code_database.csv&quot;)
+
+CA_contributors_2016$zip &lt;- as.character(CA_contributors_2016$zip)</code></pre>
+<pre class="r"><code>campaign &lt;- inner_join(CA_contributors_2016,zip_codes,by=&#39;zip&#39;)
+glimpse(campaign)</code></pre>
+<pre><code>## Rows: 1,292,843
+## Columns: 19
+## $ cand_nm              &lt;chr&gt; &quot;Clinton, Hillary Rodham&quot;, &quot;Clinton, Hillary Rod…
+## $ contb_receipt_amt    &lt;dbl&gt; 50.0, 200.0, 5.0, 48.3, 40.0, 244.3, 35.0, 100.0…
+## $ zip                  &lt;chr&gt; &quot;94939&quot;, &quot;93428&quot;, &quot;92337&quot;, &quot;95334&quot;, &quot;93011&quot;, &quot;95…
+## $ contb_date           &lt;date&gt; 2016-04-26, 2016-04-20, 2016-04-02, 2016-11-21,…
+## $ type                 &lt;chr&gt; &quot;STANDARD&quot;, &quot;STANDARD&quot;, &quot;STANDARD&quot;, &quot;STANDARD&quot;, …
+## $ primary_city         &lt;chr&gt; &quot;Larkspur&quot;, &quot;Cambria&quot;, &quot;Fontana&quot;, &quot;Livingston&quot;, …
+## $ acceptable_cities    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, &quot;Laguna Hill…
+## $ unacceptable_cities  &lt;chr&gt; NA, NA, NA, NA, NA, &quot;Walsh Station&quot;, NA, NA, NA,…
+## $ state                &lt;chr&gt; &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, …
+## $ county               &lt;chr&gt; &quot;Marin County&quot;, &quot;San Luis Obispo County&quot;, &quot;San B…
+## $ timezone             &lt;chr&gt; &quot;America/Los_Angeles&quot;, &quot;America/Los_Angeles&quot;, &quot;A…
+## $ area_codes           &lt;dbl&gt; 4.16e+05, 8.05e+02, 9.10e+05, 2.09e+02, 8.05e+02…
+## $ latitude             &lt;dbl&gt; 37.9, 35.6, 34.0, 37.3, 34.2, 38.5, 33.9, 33.9, …
+## $ longitude            &lt;dbl&gt; -123, -121, -117, -121, -119, -121, -118, -118, …
+## $ world_region         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ country              &lt;chr&gt; &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, …
+## $ decommissioned       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ estimated_population &lt;dbl&gt; 5652, 5624, 27988, 11811, 1879, 26728, 33427, 33…
+## $ notes                &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, &quot;no NWS data…</code></pre>
+<pre class="r"><code>Total_contb &lt;-campaign %&gt;% 
+  group_by(cand_nm) %&gt;% 
+  summarise(total_amt = sum(contb_receipt_amt)) %&gt;% 
+  arrange(desc(total_amt))</code></pre>
+<pre class="r"><code>Clinton_plot &lt;- ggplot(filter(campaign,cand_nm==&quot;Clinton, Hillary Rodham&quot; &amp; state == &quot;CA&quot;) %&gt;%  
+               group_by(primary_city) %&gt;% 
+               summarise(total_amt_county = sum(contb_receipt_amt)) %&gt;%
+               arrange(desc(total_amt_county)) %&gt;%
+               slice_max(total_amt_county,n=10),aes(
+                 x=total_amt_county,
+                 y=reorder(primary_city,total_amt_county))) +
+  geom_col(fill=&quot;blue&quot;) + 
+  labs(title = &quot;Hillary Clinton&quot;) + 
+  theme_clean() + 
+  ylab(&quot; &quot;) + 
+  xlab(&quot;Amount&quot;) + 
+  scale_x_continuous(labels=scales::comma) +
+  NULL</code></pre>
+<pre class="r"><code>Trump_plot &lt;- ggplot(filter(campaign,cand_nm==&quot;Trump, Donald J.&quot; &amp; state == &quot;CA&quot;) %&gt;%  
+                       group_by(primary_city) %&gt;% 
+                       summarise(total_amt_county = sum(contb_receipt_amt)) %&gt;%
+                       arrange(desc(total_amt_county)) %&gt;%
+                       slice_max(total_amt_county,n=10),aes(
+                         x = total_amt_county,
+                         y = reorder(primary_city,total_amt_county),)) +
+  geom_col(fill= &quot;red&quot;) +
+  labs(title=&quot;Donald Trump&quot;) +
+  theme_clean() + ylab(&quot; &quot;) +
+  xlab(&quot;Amount&quot;) +
+  scale_x_continuous(labels = scales::comma) +
+  NULL</code></pre>
+<pre class="r"><code>library(patchwork)
+
+combined_plot &lt;- Clinton_plot + Trump_plot 
+  plot_annotation(title = &quot;Where did the candidates raise most money?&quot;)</code></pre>
+<pre><code>## $title
+## [1] &quot;Where did the candidates raise most money?&quot;
+## 
+## $subtitle
+## NULL
+## 
+## $caption
+## NULL
+## 
+## $tag_levels
+## NULL
+## 
+## $tag_prefix
+## NULL
+## 
+## $tag_suffix
+## NULL
+## 
+## $tag_sep
+## NULL
+## 
+## $theme
+##  Named list()
+##  - attr(*, &quot;class&quot;)= chr [1:2] &quot;theme&quot; &quot;gg&quot;
+##  - attr(*, &quot;complete&quot;)= logi FALSE
+##  - attr(*, &quot;validate&quot;)= logi TRUE
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;plot_annotation&quot;</code></pre>
+<pre class="r"><code>combined_plot</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/cobining_plots-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Attempting to loop plots
+library(patchwork)
+
+#selecting top 10 rows from Total_contb
+top_10_candidates &lt;- Total_contb %&gt;%
+  slice_max(total_amt,n = 10)
+
+plots &lt;- list()
+
+#creating a loop to run plots
+Candidate_plots &lt;- 1
+for(politicians in top_10_candidates$cand_nm){
+  plots[[Candidate_plots]] &lt;- ggplot(filter(campaign,cand_nm == politicians &amp; state == &quot;CA&quot;) %&gt;%  
+                         group_by(primary_city) %&gt;% 
+                         summarise(total_amt_county = sum(contb_receipt_amt)) %&gt;%
+                         arrange(desc(total_amt_county)) %&gt;%
+                         slice_max(total_amt_county,n=10),aes(
+                           x = total_amt_county,
+                           y = reorder(primary_city,total_amt_county)
+                           ))+
+    geom_col(fill= &quot;blue&quot;) +
+    labs(title=politicians) +
+    theme_clean() + 
+    ylab(&quot; &quot;) +
+    xlab(&quot;Amount&quot;) +
+    scale_x_continuous(labels = scales::comma)
+Candidate_plots &lt;- Candidate_plots + 1
+}
+wrap_plots(plots,ncol =5)</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/top_10_candidates-1.png" width="2880" style="display: block; margin: auto;" /></p>
+</div>
