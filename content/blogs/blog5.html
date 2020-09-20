@@ -14,6 +14,7 @@ title: Movies analysis
 <link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
 
 
+<p>We analyzed the data of several types of movies, directors and ratings in order to try to understand what makes a movie more profitable thann another one.</p>
 <pre class="r"><code>knitr::opts_chunk$set(
   message = FALSE, 
   warning = FALSE, 
@@ -273,16 +274,11 @@ glimpse(movies)</code></pre>
 </tbody>
 </table>
 <ul>
-<li>Are there any missing values (NAs)? Are all entries distinct or are there duplicate entries?</li>
-</ul>
-<blockquote>
-<p>Answer</p>
-</blockquote>
+<li><p>Are there any missing values (NAs)? Are all entries distinct or are there duplicate entries?</p>
 <p>-missing values (NA) = 0
--Duplicates entries = 0</p>
-<ul>
-<li>Produce a table with the count of movies by genre, ranked in descending order</li>
+-Duplicates entries = 0</p></li>
 </ul>
+<p>-Table with the count of movies by genre, ranked in descending order</p>
 <pre class="r"><code>library(kableExtra)
 
 kable_movies_by_genre &lt;- kbl(movies%&gt;% distinct() %&gt;% 
@@ -442,10 +438,7 @@ Thriller
 </tr>
 </tbody>
 </table>
-<ul>
-<li>Produce a table with the average gross earning and budget (<code>gross</code> and <code>budget</code>) by genre.
-Calculate a variable <code>return_on_budget</code> which shows how many $ did a movie make at the box office for each $ of its budget. Ranked genres by this <code>return_on_budget</code> in descending order</li>
-</ul>
+<p>-Ttable with the average gross earning and budget (<code>gross</code> and <code>budget</code>) by genre.</p>
 <pre class="r"><code>library(docxtools)
 
 average_gross_and_budget_by_genre &lt;- kbl(movies %&gt;% 
@@ -715,9 +708,7 @@ Thriller
 </tr>
 </tbody>
 </table>
-<ul>
-<li>Produce a table that shows the top 15 directors who have created the highest gross revenue in the box office. Don’t just show the total gross amount, but also the mean, median, and standard deviation per director.</li>
-</ul>
+<p>-Table showing the top 15 directors who have created the highest gross revenue in the box office. Including total gross amount, mean, median, and standard deviation per director.</p>
 <pre class="r"><code>top15_directors &lt;- kbl(movies %&gt;% group_by(director) %&gt;%
   summarise(total_gross_director = sum(gross),
             mean_director = mean(gross),
@@ -1005,9 +996,7 @@ Ridley Scott
 </tr>
 </tbody>
 </table>
-<ul>
-<li>Finally, ratings. Produce a table that describes how ratings are distributed by genre. We don’t want just the mean, but also, min, max, median, SD and some kind of a histogram or density graph that visually shows how ratings are distributed.</li>
-</ul>
+<p>-Finally, ratings. Produce a table that describes how ratings are distributed by genre. We don’t want just the mean, but also, min, max, median, SD and some kind of a histogram or density graph that visually shows how ratings are distributed.</p>
 <p>Histogram Graph:</p>
 <pre class="r"><code>ratings_table &lt;- movies %&gt;% #Assigned the requested variables to ratings table
   group_by(genre) %&gt;%
@@ -1921,9 +1910,7 @@ rating
 </div>
 <div id="use-ggplot-to-answer-the-following" class="section level2">
 <h2>Use <code>ggplot</code> to answer the following</h2>
-<ul>
-<li>Examine the relationship between <code>gross</code> and <code>cast_facebook_likes</code>. Produce a scatterplot and write one sentence discussing whether the number of facebook likes that the cast has received is likely to be a good predictor of how much money a movie will make at the box office. What variable are you going to map to the Y- and X- axes?</li>
-</ul>
+<p>-Relationship between <code>gross</code> and <code>cast_facebook_likes</code>.</p>
 <pre class="r"><code>gross_on_fblikes &lt;- ggplot(movies, aes(x = cast_facebook_likes, y = gross)) + #chose likes on the x-axis, because hypothetically likes influence gross sales and not the other way around
   geom_point(alpha = 0.2) + 
   scale_x_log10() + #applied log scale on both axis to get a better view of the data in the plot
@@ -1938,13 +1925,10 @@ rating
   NULL
 
 gross_on_fblikes</code></pre>
-<p><img src="/blogs/blog5_files/figure-html/gross_on_fblikes-1.png" width="648" style="display: block; margin: auto;" />
-&gt;Answer</p>
-<ul>
-<li><p>We use “cast_facebook_likes” to map the the X-axes and “gross” to map the Y-axes.</p></li>
-<li><p>The number of facebook likes that the cast has received can predicts the gross box office. The more facebook likes the movie’s cast receives, the more money it will make. However, the positive correlation is not very strong, since given the same “cast_facebook_likes”, the deviation of “gross” is quite large, which makes the fitted correlation contain large errors.</p></li>
-<li><p>Examine the relationship between <code>gross</code> and <code>budget</code>. Produce a scatterplot and write one sentence discussing whether budget is likely to be a good predictor of how much money a movie will make at the box office.</p></li>
-</ul>
+<p><img src="/blogs/blog5_files/figure-html/gross_on_fblikes-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>-We use “cast_facebook_likes” to map the the X-axes and “gross” to map the Y-axes.
+-The number of facebook likes that the cast has received can predicts the gross box office. The more facebook likes the movie’s cast receives, the more money it will make. However, the positive correlation is not very strong, since given the same “cast_facebook_likes”, the deviation of “gross” is quite large, which makes the fitted correlation contain large errors.</p>
+<p>-Relationship between <code>gross</code> and <code>budget</code>.</p>
 <pre class="r"><code>gross_on_budget &lt;- ggplot(movies, aes(
   x = budget, 
   y = gross
@@ -1962,12 +1946,9 @@ gross_on_fblikes</code></pre>
   NULL
 
 gross_on_budget</code></pre>
-<p><img src="/blogs/blog5_files/figure-html/gross_on_budget-1.png" width="648" style="display: block; margin: auto;" />
-&gt;Answer</p>
-<p>Budget is likely to be a good predictor, since most of the data points are distributed closely near to the fitted line, especially in the upper right corner of the plot.</p>
-<ul>
-<li>Examine the relationship between <code>gross</code> and <code>rating</code>. Produce a scatterplot, faceted by <code>genre</code> and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?</li>
-</ul>
+<p><img src="/blogs/blog5_files/figure-html/gross_on_budget-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>-Budget is likely to be a good predictor, since most of the data points are distributed closely near to the fitted line, especially in the upper right corner of the plot.</p>
+<p>-Examine the relationship between <code>gross</code> and <code>rating</code>. Produce a scatterplot, faceted by <code>genre</code> and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?</p>
 <pre class="r"><code>gross_on_rating_plot &lt;-ggplot(movies %&gt;% 
   distinct(), #Used distinct function to remove duplicate rows                               
        aes(
@@ -1988,11 +1969,8 @@ gross_on_budget</code></pre>
   NULL
 
 gross_on_rating_plot</code></pre>
-<p><img src="/blogs/blog5_files/figure-html/gross_on_rating-1.png" width="648" style="display: block; margin: auto;" />
-&gt;Answer</p>
-<ul>
-<li>For action, adventure, animation, biography, fantasy, and horror movies, IMDB ratings are good predictors, since the distance between data points and the fitted line are rather short, which means the fitted line contains less errors. While for comedy, crime, drama and Sci-Fi movies, the correlation between two variables are rather weak. For some genres, the data are not abundant enough to prove correlations (i.e. family, musical, romance, thriller and western).</li>
-<li>There is something strange in this dataset. Some entries are almost the same to each other(titles, directors, year, etc. are all the same) except for votes.</li>
-</ul>
+<p><img src="/blogs/blog5_files/figure-html/gross_on_rating-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>-For action, adventure, animation, biography, fantasy, and horror movies, IMDB ratings are good predictors, since the distance between data points and the fitted line are rather short, which means the fitted line contains less errors. While for comedy, crime, drama and Sci-Fi movies, the correlation between two variables are rather weak. For some genres, the data are not abundant enough to prove correlations (i.e. family, musical, romance, thriller and western).
+-There is something strange in this dataset. Some entries are almost the same to each other(titles, directors, year, etc. are all the same) except for votes.</p>
 </div>
 </div>

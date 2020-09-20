@@ -8,6 +8,8 @@ keywords: ""
 slug: blog5
 title: Movies analysis 
 ---
+
+We analyzed the data of several types of movies, directors and ratings in order to try to understand what makes a movie more profitable thann another one.
 ```{r, setup}
 knitr::opts_chunk$set(
   message = FALSE, 
@@ -59,13 +61,11 @@ skim(movies)
 ```
 - Are there any missing values (NAs)? Are all entries distinct or are there duplicate entries?
 
->Answer
-
   -missing values (NA) = 0
   -Duplicates entries = 0
 
         
-- Produce a table with the count of movies by genre, ranked in descending order
+-Table with the count of movies by genre, ranked in descending order
 
 ```{r kable_movies_by_genre}
 
@@ -82,8 +82,7 @@ kable_movies_by_genre
 ```
 
 
-- Produce a table with the average gross earning and budget (`gross` and `budget`) by genre.
-Calculate a variable `return_on_budget` which shows how many \$ did a movie make at the box office for each \$ of its budget. Ranked genres by this `return_on_budget` in descending order
+-Ttable with the average gross earning and budget (`gross` and `budget`) by genre.
 
 ```{r average_gross_and_budget_by_genre}
 
@@ -101,7 +100,7 @@ average_gross_and_budget_by_genre
 
 ```
 
-- Produce a table that shows the top 15 directors who have created the highest gross revenue in the box office. Don't just show the total gross amount, but also the mean, median, and standard deviation per director.
+-Table showing the top 15 directors who have created the highest gross revenue in the box office. Including total gross amount, mean, median, and standard deviation per director.
 ```{r top15_directors}
 
 top15_directors <- kbl(movies %>% group_by(director) %>%
@@ -117,7 +116,7 @@ top15_directors
 ```
 
 
-- Finally, ratings. Produce a table that describes how ratings are distributed by genre. We don't want just the mean, but also, min, max, median, SD and some kind of a histogram or density graph that visually shows how ratings are distributed. 
+-Finally, ratings. Produce a table that describes how ratings are distributed by genre. We don't want just the mean, but also, min, max, median, SD and some kind of a histogram or density graph that visually shows how ratings are distributed. 
 
 Histogram Graph:
 ```{r ratings_table_and_graph ,fig.width=20}
@@ -157,8 +156,7 @@ skim(movies)
 
 ## Use `ggplot` to answer the following
 
-  - Examine the relationship between `gross` and `cast_facebook_likes`. Produce a scatterplot and write one sentence discussing whether the number of facebook likes that the cast has received is likely to be a good predictor of how much money a movie will make at the box office. What variable are you going to map to the Y- and X- axes?
-  
+-Relationship between `gross` and `cast_facebook_likes`.
   
 ```{r gross_on_fblikes}
 gross_on_fblikes <- ggplot(movies, aes(x = cast_facebook_likes, y = gross)) + #chose likes on the x-axis, because hypothetically likes influence gross sales and not the other way around
@@ -177,12 +175,12 @@ gross_on_fblikes <- ggplot(movies, aes(x = cast_facebook_likes, y = gross)) + #c
 gross_on_fblikes
 
 ```
-  >Answer
+
   
-  - We use "cast_facebook_likes" to map the the X-axes and "gross" to map the Y-axes. 
-  - The number of facebook likes that the cast has received can predicts the gross box office. The more facebook likes the movie's cast receives, the more money it will make. However, the positive correlation is not very strong, since given the same "cast_facebook_likes", the deviation of "gross" is quite large, which makes the fitted correlation contain large errors.
+-We use "cast_facebook_likes" to map the the X-axes and "gross" to map the Y-axes. 
+-The number of facebook likes that the cast has received can predicts the gross box office. The more facebook likes the movie's cast receives, the more money it will make. However, the positive correlation is not very strong, since given the same "cast_facebook_likes", the deviation of "gross" is quite large, which makes the fitted correlation contain large errors.
   
-  - Examine the relationship between `gross` and `budget`. Produce a scatterplot and write one sentence discussing whether budget is likely to be a good predictor of how much money a movie will make at the box office.
+-Relationship between `gross` and `budget`.
 
 ```{r gross_on_budget}
 gross_on_budget <- ggplot(movies, aes(
@@ -204,11 +202,11 @@ gross_on_budget <- ggplot(movies, aes(
 gross_on_budget
 
 ```
-  >Answer
+
   
-  Budget is likely to be a good predictor, since most of the data points are distributed closely near to the fitted line, especially in the upper right corner of the plot.
+-Budget is likely to be a good predictor, since most of the data points are distributed closely near to the fitted line, especially in the upper right corner of the plot.
   
-  - Examine the relationship between `gross` and `rating`. Produce a scatterplot, faceted by `genre` and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?
+-Examine the relationship between `gross` and `rating`. Produce a scatterplot, faceted by `genre` and discuss whether IMDB ratings are likely to be a good predictor of how much money a movie will make at the box office. Is there anything strange in this dataset?
 
 ```{r gross_on_rating}
 
@@ -234,7 +232,6 @@ gross_on_rating_plot <-ggplot(movies %>%
 gross_on_rating_plot
 
 ```
->Answer
 
-- For action, adventure, animation, biography, fantasy, and horror movies, IMDB ratings are good predictors, since the distance between data points and the fitted line are rather short, which means the fitted line contains less errors. While for comedy, crime, drama and Sci-Fi movies, the correlation between two variables are rather weak. For some genres, the data are not abundant enough to prove correlations (i.e. family, musical, romance, thriller and western).
-- There is something strange in this dataset. Some entries are almost the same to each other(titles, directors, year, etc. are all the same) except for votes.
+-For action, adventure, animation, biography, fantasy, and horror movies, IMDB ratings are good predictors, since the distance between data points and the fitted line are rather short, which means the fitted line contains less errors. While for comedy, crime, drama and Sci-Fi movies, the correlation between two variables are rather weak. For some genres, the data are not abundant enough to prove correlations (i.e. family, musical, romance, thriller and western).
+-There is something strange in this dataset. Some entries are almost the same to each other(titles, directors, year, etc. are all the same) except for votes.
