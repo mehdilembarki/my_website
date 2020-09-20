@@ -74,6 +74,7 @@
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
+<p>Through this analysis, we tried to answer the following questions: where do people drink the most alcohol? And what are the preferences depending on the country?</p>
 <pre class="r"><code>knitr::opts_chunk$set(
   message = FALSE, 
   warning = FALSE, 
@@ -232,10 +233,6 @@ data(drinks)</code></pre>
 </tr>
 </tbody>
 </table>
-<p>What are the variable types? Any missing values we should worry about?</p>
-<p>Answer:</p>
-<p>Variable types : character, numeric
-There are no missing values</p>
 <pre class="r"><code>top25_beer_plot &lt;- drinks %&gt;% 
   top_n(25, beer_servings) %&gt;% #ranked top 25 by beer servings
   ggplot(aes(
@@ -251,7 +248,8 @@ There are no missing values</p>
   NULL
 
 top25_beer_plot</code></pre>
-<p><img src="/blogs/blog6_files/figure-html/beer_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/blogs/blog6_files/figure-html/beer_plot-1.png" width="648" style="display: block; margin: auto;" />
+-Compared to wine, the high beer consuming countries are mainly in higher latitudes (north of the Alps), since wheat is widely planted and is an important raw material for beer in these countries. In addition, the beer ranking includes the most continents among other liquors, which may implicate that beer is the most widely accepted and accessible alcohol in the world.</p>
 <pre class="r"><code>#copied top 25 beer plot and replaced beer with wine
 top25_wine_plot &lt;- drinks %&gt;% 
   top_n(25, wine_servings) %&gt;% 
@@ -268,7 +266,8 @@ top25_wine_plot &lt;- drinks %&gt;%
   NULL
 
 top25_wine_plot</code></pre>
-<p><img src="/blogs/blog6_files/figure-html/wine_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/blogs/blog6_files/figure-html/wine_plot-1.png" width="648" style="display: block; margin: auto;" />
+- In the wine consumption rankings, 9 of the top 10 are European countries. Most areas of Europe (especially the low latitudes) are very suitable for growing grapes due to sufficient sunlight and fertile soil. The typical ones are Southern France, Portugal, Andorra, Italy, and Greece. This may develop the people’s habit of drinking wine.</p>
 <pre class="r"><code>#copied top 25 beer plot and replaced beer with spirit
 top25_spirit_plot &lt;- drinks %&gt;% 
   top_n(25, spirit_servings) %&gt;% 
@@ -290,7 +289,6 @@ top25_spirit_plot</code></pre>
 <p>IMPLICATIONS</p>
 </blockquote>
 <ul>
-<li>In the wine consumption rankings, 9 of the top 10 are European countries. Most areas of Europe (especially the low latitudes) are very suitable for growing grapes due to sufficient sunlight and fertile soil. The typical ones are Southern France, Portugal, Andorra, Italy, and Greece. This may develop the people’s habit of drinking wine. Compared to wine, the high beer consuming countries are mainly in higher latitudes (north of the Alps), since wheat is widely planted and is an important raw material for beer in these countries. In addition, the beer ranking includes the most continents among other liquors, which may implicate that beer is the most widely accepted and accessible alcohol in the world.</li>
 <li>In the spirits consumption ranking, six of the top 25 are island countries in the Caribbean and the Pacific, and 11 of the top 25 are East European countries. This conforms to the origins of two very famous spirit types - rum and vodka.</li>
 </ul>
 </div>

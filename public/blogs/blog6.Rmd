@@ -9,6 +9,7 @@ slug: blog6
 title: Beer, Wine And Spirits 
 ---
 
+Through this analysis, we tried to answer the following questions: where do people drink the most alcohol? And what are the preferences depending on the country?
 
 ```{r, setup}
 knitr::opts_chunk$set(
@@ -58,12 +59,7 @@ data(drinks)
 ```{r glimpse_skim_data}
 skim(drinks)
 ```
-What are the variable types? Any missing values we should worry about?
 
-Answer:
-
-Variable types : character, numeric
-There are no missing values
 
 ```{r beer_plot}
 
@@ -85,7 +81,7 @@ top25_beer_plot
 
 
 ```
-
+-Compared to wine, the high beer consuming countries are mainly in higher latitudes (north of the Alps), since wheat is widely planted and is an important raw material for beer in these countries. In addition, the beer ranking includes the most continents among other liquors, which may implicate that beer is the most widely accepted and accessible alcohol in the world.
 
 ```{r wine_plot}
 
@@ -108,7 +104,7 @@ top25_wine_plot
 
 
 ```
-
+- In the wine consumption rankings, 9 of the top 10 are European countries. Most areas of Europe (especially the low latitudes) are very suitable for growing grapes due to sufficient sunlight and fertile soil. The typical ones are Southern France, Portugal, Andorra, Italy, and Greece. This may develop the people's habit of drinking wine.
 ```{r spirit_plot}
 
 #copied top 25 beer plot and replaced beer with spirit
@@ -132,7 +128,6 @@ top25_spirit_plot
 
 > IMPLICATIONS
 
-- In the wine consumption rankings, 9 of the top 10 are European countries. Most areas of Europe (especially the low latitudes) are very suitable for growing grapes due to sufficient sunlight and fertile soil. The typical ones are Southern France, Portugal, Andorra, Italy, and Greece. This may develop the people's habit of drinking wine. Compared to wine, the high beer consuming countries are mainly in higher latitudes (north of the Alps), since wheat is widely planted and is an important raw material for beer in these countries. In addition, the beer ranking includes the most continents among other liquors, which may implicate that beer is the most widely accepted and accessible alcohol in the world.
 - In the spirits consumption ranking, six of the top 25 are island countries in the Caribbean and the Pacific, and 11 of the top 25 are East European countries. This conforms to the origins of two very famous spirit types - rum and vodka.
 
 

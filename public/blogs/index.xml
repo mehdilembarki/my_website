@@ -35,7 +35,8 @@
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>
       
       <guid>/blogs/blog6/</guid>
-      <description>knitr::opts_chunk$set( message = FALSE, warning = FALSE, tidy=FALSE, # display code as typed size=&amp;quot;small&amp;quot;) # slightly smaller font for code options(digits = 3) # default figure size knitr::opts_chunk$set( fig.width=6.75, fig.height=6.75, fig.align = &amp;quot;center&amp;quot; ) Where Do People Drink The Most Beer, Wine And Spirits? library(fivethirtyeight) data(drinks) skim(drinks)  (#tab:glimpse_skim_data)Data summary  Name drinks  Number of rows 193  Number of columns 5  _______________________   Column type frequency:   character 1  numeric 4  ________________________   Group variables None    Variable type: character</description>
+      <description>Through this analysis, we tried to answer the following questions: where do people drink the most alcohol? And what are the preferences depending on the country?
+knitr::opts_chunk$set( message = FALSE, warning = FALSE, tidy=FALSE, # display code as typed size=&amp;quot;small&amp;quot;) # slightly smaller font for code options(digits = 3) # default figure size knitr::opts_chunk$set( fig.width=6.75, fig.height=6.75, fig.align = &amp;quot;center&amp;quot; ) Where Do People Drink The Most Beer, Wine And Spirits?</description>
     </item>
     
     <item>
