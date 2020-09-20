@@ -364,7 +364,7 @@ From this we can conclude that both room type and property type have an influenc
 
 Following from this, we wanted to know what influence rating has on the price. For this we used both data on the review scores and whether the listing is posted by a superhost.
 
-```{r rating plots, message = false}
+```{r rating plots}
 
 #Plotted a density graph to display the relationship with price in being a superhost
 listings_clean %>%
