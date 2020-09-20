@@ -9,7 +9,7 @@ slug: blog7
 title: US elections
 ---
 
-
+We compared the different candidates to the 2016 elections by number of votes in each city in order to get an idea of which region in the uNited states supports whom.
 ```{r, setup}
 knitr::opts_chunk$set(
   message = FALSE, 
